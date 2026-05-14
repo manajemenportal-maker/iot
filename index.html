@@ -28,6 +28,12 @@
                 0px 6px 10px rgba(0, 0, 0, 0.6);
             letter-spacing: 2px;
         }
+        /* Styling khusus untuk area JSON log */
+        .json-log {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -246,7 +252,6 @@
                         <input type="text" id="new-cust-password" value="123" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500">
                     </div>
                 </div>
-                <!-- Tambahan Data Detail Customer -->
                 <div>
                     <label class="block text-sm font-medium text-slate-400 mb-1">Email Perusahaan</label>
                     <input type="email" id="new-cust-email" placeholder="admin@perusahaan.com" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500">
@@ -268,7 +273,7 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL: REGISTER PENGGUNA BARU (SELF-SERVICE) ==================== -->
+    <!-- ==================== MODAL: REGISTER PENGGUNA BARU ==================== -->
     <div id="modal-register" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 hidden-screen p-4 overflow-y-auto">
         <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 w-full max-w-md relative overflow-hidden my-auto">
             <div class="absolute -left-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -293,7 +298,6 @@
                         <input type="password" id="reg-password" placeholder="***" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
                     </div>
                 </div>
-                <!-- Tambahan Data Detail Customer -->
                 <div>
                     <label class="block text-sm font-medium text-slate-400 mb-1">Email Kontak</label>
                     <input type="email" id="reg-email" placeholder="email@perusahaan.com" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
@@ -315,7 +319,7 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL: TAMBAH AC (NODE IOT) ==================== -->
+    <!-- ==================== MODAL: TAMBAH AC ==================== -->
     <div id="modal-add-ac" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 hidden-screen p-4">
         <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 w-full max-w-md relative overflow-hidden">
             <div class="flex justify-between items-center mb-6">
@@ -344,6 +348,35 @@
                     <button onclick="closeAddAcModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 rounded-lg transition-colors">Batal</button>
                     <button onclick="saveNewAc()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-colors">Simpan Data IoT</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: SYNC API (HASIL POST WEBHOOK) ==================== -->
+    <div id="modal-sync-api" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex items-center justify-center z-50 hidden-screen p-4 overflow-y-auto">
+        <div class="bg-slate-800 border border-emerald-500/50 rounded-2xl shadow-2xl p-6 w-full max-w-2xl my-auto">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        Sinkronisasi API Berhasil Disimulasikan!
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Status transmisi data (POST Request) ke <span class="text-emerald-300">https://www.ksasemesta.it.com/api/iot-webhook</span></p>
+                </div>
+                <button onclick="closeSyncModal()" class="text-slate-400 hover:text-white bg-slate-700 p-1.5 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 mb-4">
+                <p class="text-xs text-slate-500 mb-2 font-mono uppercase tracking-widest border-b border-slate-700 pb-2">Payload JSON yang dikirimkan:</p>
+                <div class="max-h-64 overflow-y-auto">
+                    <pre><code id="sync-json-output" class="json-log text-sm text-cyan-300"></code></pre>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeSyncModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-6 rounded-lg transition-colors">Selesai</button>
             </div>
         </div>
     </div>
@@ -379,7 +412,7 @@
         let unsubscribeDevices = null;
         let unsubscribeUsers = null;
 
-        // Data awal mockup (diperbarui dengan field data lengkap)
+        // Data awal mockup 
         const initialUsers = [
             { id: 'u_admin', username: 'admin', password: '123', role: 'admin', name: 'Super Administrator', email: 'admin@xtron.com', phone: '-', address: '-' },
             { id: 'c_001', username: 'ptangkasa', password: '123', role: 'customer', name: 'PT. Angkasa Raya', email: 'info@angkasa.co.id', phone: '081234567890', address: 'Jl. Merdeka No. 1, Jakarta' },
@@ -387,7 +420,7 @@
         ];
 
         // -------------------------------------------------------------
-        // INIT & LOCAL STORAGE PERSISTENCE (Anti-Refresh System)
+        // INIT & LOCAL STORAGE PERSISTENCE 
         // -------------------------------------------------------------
         async function checkAndSeedDatabase() {
             try {
@@ -538,7 +571,6 @@
             customers.sort((a,b) => a.id.localeCompare(b.id)).forEach(cust => {
                 const acCount = cachedDevices.filter(d => d.ownerId === cust.id).length;
                 const tr = document.createElement('tr');
-                // Menampilkan Data Lengkap di Tabel Admin
                 tr.innerHTML = `
                     <td class="py-4 text-slate-300">
                         <div class="font-semibold text-white">${cust.name}</div>
@@ -550,9 +582,9 @@
                     </td>
                     <td class="py-4 text-center"><span class="bg-slate-700 text-cyan-400 px-3 py-1 rounded-full text-xs font-bold">${acCount} Unit</span></td>
                     <td class="py-4 text-right flex justify-end gap-2">
-                        <!-- Tombol Simulasi Sync API ke www.ksasemesta.it.com -->
-                        <button onclick="alert('Data untuk ${cust.name} siap dikirim melalui Webhook/API ke www.ksasemesta.it.com!')" class="text-xs bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/40 px-3 py-1.5 rounded transition-colors flex items-center gap-1" title="Kirim data ke ksasemesta.it.com">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.5-4.4-3.5h-1.2c-.7-3-3.2-5.2-6.2-5.6-3-.3-5.9 1.3-7.3 4-1.2 2.5-1 6.5.5 8.8m8.7-1.6V21"/><path d="M16 16l-4-4-4 4"/></svg>
+                        <!-- Tombol Sync API yang Sudah Diaktifkan -->
+                        <button onclick="syncToAPI('${cust.id}', this)" class="text-xs bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/40 px-3 py-1.5 rounded transition-all flex items-center gap-1" title="Kirim data ke ksasemesta.it.com">
+                            <svg class="sync-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.5-4.4-3.5h-1.2c-.7-3-3.2-5.2-6.2-5.6-3-.3-5.9 1.3-7.3 4-1.2 2.5-1 6.5.5 8.8m8.7-1.6V21"/><path d="M16 16l-4-4-4 4"/></svg>
                             Sync API
                         </button>
                         <button onclick="adminViewCustomer('${cust.id}', '${cust.name}')" class="text-xs bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-3 py-1.5 rounded transition-colors flex items-center gap-1">
@@ -567,6 +599,81 @@
                 tbody.appendChild(tr);
             });
         }
+
+        // =======================================================
+        // FITUR BARU: ENGINE INTEGRASI API WEBHOOK
+        // =======================================================
+        window.syncToAPI = async (customerId, btnElement) => {
+            // Ambil data spesifik yang akan dikirim
+            const customer = cachedUsers.find(u => u.id === customerId);
+            const devices = cachedDevices.filter(d => d.ownerId === customerId);
+            const totalKwh = devices.reduce((sum, d) => sum + d.baseData, 0);
+
+            // Ubah tombol jadi "Loading..."
+            const originalHTML = btnElement.innerHTML;
+            btnElement.innerHTML = `<svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Sending...`;
+            btnElement.disabled = true;
+            btnElement.classList.add('opacity-70', 'cursor-not-allowed');
+
+            // Format JSON Payload yang dirakit untuk tim KSA Semesta
+            const apiPayload = {
+                target_url: "https://" + (customer.apiTarget || 'www.ksasemesta.it.com') + "/api/iot-webhook",
+                timestamp: new Date().toISOString(),
+                client_info: {
+                    customer_id: customer.id,
+                    company_name: customer.name,
+                    contact_email: customer.email,
+                    contact_phone: customer.phone,
+                    billing_address: customer.address
+                },
+                energy_summary: {
+                    total_ac_units: devices.length,
+                    active_ac_units: devices.filter(d => d.power).length,
+                    total_consumption_kwh: totalKwh,
+                    estimated_billing_idr: totalKwh * 1500
+                },
+                iot_nodes: devices.map(d => ({
+                    mac_address: d.iotAddress || d.id,
+                    device_name: d.name,
+                    location: d.location,
+                    current_kwh: d.baseData,
+                    power_status: d.power ? "ON" : "OFF",
+                    temperature_set: d.temp + "°C",
+                    connection: d.status
+                }))
+            };
+
+            // Simulasi proses HTTP POST Request (Fetch)
+            setTimeout(() => {
+                // Kembalikan tombol ke semula
+                btnElement.innerHTML = originalHTML;
+                btnElement.disabled = false;
+                btnElement.classList.remove('opacity-70', 'cursor-not-allowed');
+
+                // Tampilkan Log Payload di Modal agar Backend Developer bisa melihat strukturnya
+                document.getElementById('sync-json-output').textContent = JSON.stringify(apiPayload, null, 4);
+                document.getElementById('modal-sync-api').classList.remove('hidden-screen');
+
+                /*
+                // CATATAN UNTUK PENGEMBANG (UN-COMMENT SCRIPT DI BAWAH JIKA ENDPOINT SUDAH JADI):
+                fetch(apiPayload.target_url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(apiPayload)
+                })
+                .then(response => response.json())
+                .then(data => console.log('Berhasil terkirim ke server KSA Semesta!', data))
+                .catch(error => console.error('Gagal mengirim webhook:', error));
+                */
+
+            }, 1200); // Simulasi delay internet 1.2 Detik
+        };
+
+        window.closeSyncModal = () => {
+            document.getElementById('modal-sync-api').classList.add('hidden-screen');
+        };
+        // =======================================================
+
 
         window.adminViewCustomer = (customerId, customerName) => {
             viewingCustomerId = customerId;
@@ -594,7 +701,6 @@
         window.showAddCustomerModal = () => { document.getElementById('modal-add-customer').classList.remove('hidden-screen'); };
         window.closeAddCustomerModal = () => { document.getElementById('modal-add-customer').classList.add('hidden-screen'); };
 
-        // Register Mandiri dengan Field Tambahan
         window.handleSelfRegister = async () => {
             const name = document.getElementById('reg-name').value.trim();
             const username = document.getElementById('reg-username').value.trim();
@@ -608,15 +714,9 @@
 
             const newId = `c_${Date.now()}`; 
             await setDoc(doc(db, "users", newId), { 
-                id: newId, 
-                username: username, 
-                password: password, 
-                role: 'customer', 
-                name: name,
-                email: email,
-                phone: phone,
-                address: address,
-                apiTarget: 'www.ksasemesta.it.com' // Flag disiapkan untuk API
+                id: newId, username: username, password: password, role: 'customer', 
+                name: name, email: email, phone: phone, address: address,
+                apiTarget: 'www.ksasemesta.it.com'
             });
             alert("Pendaftaran berhasil! Silakan masuk menggunakan akun baru Anda.");
             closeRegisterModal();
@@ -624,7 +724,6 @@
             document.getElementById('login-password').value = password;
         };
 
-        // Pembuatan Akun oleh Admin dengan Field Tambahan
         window.saveNewCustomer = async () => {
             const name = document.getElementById('new-cust-name').value.trim();
             const username = document.getElementById('new-cust-username').value.trim();
@@ -638,19 +737,12 @@
 
             const newId = `c_${Date.now()}`;
             await setDoc(doc(db, "users", newId), { 
-                id: newId, 
-                username: username, 
-                password: password, 
-                role: 'customer', 
-                name: name,
-                email: email,
-                phone: phone,
-                address: address,
+                id: newId, username: username, password: password, role: 'customer', 
+                name: name, email: email, phone: phone, address: address,
                 apiTarget: 'www.ksasemesta.it.com'
             });
             closeAddCustomerModal();
         };
-
 
         // -------------------------------------------------------------
         // FITUR TAMBAH AC (MODAL)
@@ -679,15 +771,9 @@
             const newId = acAddress.replace(/\s+/g, '-').toUpperCase();
             
             const newAcDoc = {
-                id: newId,
-                iotAddress: acAddress,
-                ownerId: targetCustomerIdForAc,
-                name: acName,
-                location: acLocation,
-                baseData: Math.floor(Math.random() * 50),
-                status: 'online',
-                power: true,
-                temp: 24
+                id: newId, iotAddress: acAddress, ownerId: targetCustomerIdForAc,
+                name: acName, location: acLocation, baseData: Math.floor(Math.random() * 50),
+                status: 'online', power: true, temp: 24
             };
 
             try {
@@ -697,7 +783,6 @@
                 alert("Terjadi kesalahan saat menyimpan AC ke server.");
             }
         };
-
 
         // -------------------------------------------------------------
         // RENDER CUSTOMER DASHBOARD & CONTROLS
@@ -796,7 +881,6 @@
             }
         };
 
-
         // -------------------------------------------------------------
         // ENGINE SIMULATOR (Update Firebase Otomatis)
         // -------------------------------------------------------------
@@ -808,15 +892,11 @@
             if(!isSimulationRunning || !currentUser) return;
             
             const activeDevices = cachedDevices.filter(d => d.status === 'online' && d.power);
-            
             for (let device of activeDevices) {
                 const baseConsumption = Math.floor(Math.random() * 3) + 1; 
                 const tempFactor = (30 - device.temp) * 0.2; 
                 const newData = device.baseData + Math.round(baseConsumption + tempFactor);
-                
-                try {
-                    await updateDoc(doc(db, "devices", device.id), { baseData: newData });
-                } catch(e) {}
+                try { await updateDoc(doc(db, "devices", device.id), { baseData: newData }); } catch(e) {}
             }
         }, 3600000); 
 
