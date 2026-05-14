@@ -45,7 +45,6 @@
                     Sistem Belum Siap...
                 </button>
                 
-                <!-- Fitur Daftar / Register Baru ditambahkan di sini -->
                 <div class="text-center pt-2 text-sm text-slate-400">
                     Belum punya akun? 
                     <button onclick="showRegisterModal()" class="text-cyan-400 hover:text-cyan-300 font-semibold underline transition-colors">Daftar sekarang</button>
@@ -79,7 +78,6 @@
         </nav>
 
         <main class="p-6 max-w-7xl mx-auto w-full space-y-6">
-            <!-- Admin Stats -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
                     <div class="p-4 bg-blue-500/20 text-blue-400 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
@@ -157,7 +155,6 @@
         <main class="p-6 max-w-7xl mx-auto w-full space-y-6">
             
             <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Total Sum Card -->
                 <div class="lg:col-span-2 bg-gradient-to-br from-slate-800 to-slate-800/50 rounded-2xl p-8 border border-slate-700 shadow-xl relative overflow-hidden">
                     <div class="absolute -right-10 -top-10 w-40 h-40 bg-yellow-500/10 rounded-full blur-3xl"></div>
                     <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-orange-500/10 rounded-full blur-3xl"></div>
@@ -173,14 +170,12 @@
                         <span class="text-xl text-slate-400 font-mono">kWh</span>
                     </div>
 
-                    <!-- Tambahan Estimasi Biaya Rupiah -->
                     <div class="mt-6 pt-4 border-t border-slate-700/50">
                         <p class="text-sm text-slate-400 mb-1">Estimasi Tagihan Listrik (Asumsi Rp 1.500 / kWh)</p>
                         <h3 id="cust-total-cost" class="text-3xl font-bold text-emerald-400 tracking-wide">Rp 0</h3>
                     </div>
                 </div>
 
-                <!-- Stats & Controls -->
                 <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl flex flex-col justify-between">
                     <div>
                         <h3 class="text-slate-400 font-medium mb-4 uppercase tracking-wider text-xs">Statistik Energi</h3>
@@ -208,7 +203,6 @@
                 </div>
             </section>
 
-            <!-- AC Grid -->
             <section>
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-white flex items-center gap-2">
@@ -257,7 +251,6 @@
     <div id="modal-register" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 hidden-screen p-4">
         <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 w-full max-w-md relative overflow-hidden">
             <div class="absolute -left-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
-            
             <div class="flex justify-between items-center mb-6 relative z-10">
                 <h3 class="text-xl font-bold text-white">Daftar Akun Baru</h3>
                 <button onclick="closeRegisterModal()" class="text-slate-400 hover:text-white">
@@ -285,15 +278,43 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL: TAMBAH AC (NODE IOT) ==================== -->
+    <div id="modal-add-ac" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 hidden-screen p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 w-full max-w-md relative overflow-hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-cyan-400"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    Setup Unit AC Baru
+                </h3>
+                <button onclick="closeAddAcModal()" class="text-slate-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-1">Nama Perangkat AC</label>
+                    <input type="text" id="new-ac-name" placeholder="Misal: AC Split Daikin 1PK" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-1">Lokasi Pemasangan</label>
+                    <input type="text" id="new-ac-location" placeholder="Misal: Ruang Meeting / Lantai 1" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                </div>
+                <div class="pt-4 flex gap-3">
+                    <button onclick="closeAddAcModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 rounded-lg transition-colors">Batal</button>
+                    <button onclick="saveNewAc()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-colors">Simpan Data IoT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- ==================== JAVASCRIPT LOGIC (FIREBASE MODULAR) ==================== -->
     <script type="module">
-        // 1. Import Firebase SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
         import { getFirestore, collection, getDocs, onSnapshot, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 2. Konfigurasi Firebase Anda
+        // Konfigurasi Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBY0d7PEX_YwUbZZc_2D9F3I1pZ_fQj40M",
             authDomain: "iot-xtron.firebaseapp.com",
@@ -304,55 +325,45 @@
             measurementId: "G-GKS00T53K5"
         };
 
-        // 3. Inisialisasi Aplikasi Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
         // State Global Aplikasi
         let currentUser = null;
-        let viewingCustomerId = null; // Menyimpan ID Customer jika Admin sedang "memata-matai" (View) dashboard mereka
+        let viewingCustomerId = null; 
         let isSimulationRunning = true;
         let cachedUsers = [];
         let cachedDevices = [];
         let unsubscribeDevices = null;
         let unsubscribeUsers = null;
 
-        // Data awal untuk seeding database jika masih kosong
+        // Data awal mockup jika Firestore kosong
         const initialUsers = [
             { id: 'u_admin', username: 'admin', password: '123', role: 'admin', name: 'Super Administrator' },
             { id: 'c_001', username: 'ptangkasa', password: '123', role: 'customer', name: 'PT. Angkasa Raya' },
             { id: 'c_002', username: 'hotelmaju', password: '123', role: 'customer', name: 'Hotel Maju Sejahtera' }
         ];
-        const initialDevices = [
-            { id: 'ac-101', ownerId: 'c_001', name: 'AC Ruang Meeting', location: 'Lantai 1', baseData: 1450, status: 'online', power: true, temp: 22 },
-            { id: 'ac-102', ownerId: 'c_001', name: 'AC Server Room', location: 'Lantai 2', baseData: 4200, status: 'online', power: true, temp: 18 },
-            { id: 'ac-103', ownerId: 'c_001', name: 'AC Lobby', location: 'Ground', baseData: 800, status: 'online', power: false, temp: 24 },
-            { id: 'ac-201', ownerId: 'c_002', name: 'AC Kamar 101', location: 'Lantai 1', baseData: 120, status: 'online', power: true, temp: 25 },
-            { id: 'ac-202', ownerId: 'c_002', name: 'AC Kamar 102', location: 'Lantai 1', baseData: 150, status: 'online', power: true, temp: 23 },
-            { id: 'ac-203', ownerId: 'c_002', name: 'AC Restoran', location: 'Ground', baseData: 950, status: 'online', power: true, temp: 21 }
-        ];
 
-        // 4. Inisialisasi Database Pertama Kali
+        // -------------------------------------------------------------
+        // INIT & LOCAL STORAGE PERSISTENCE (Anti-Refresh System)
+        // -------------------------------------------------------------
         async function checkAndSeedDatabase() {
             try {
                 const usersCol = collection(db, 'users');
                 const usersSnapshot = await getDocs(usersCol);
                 
                 if (usersSnapshot.empty) {
-                    document.getElementById('db-status').innerText = "Database kosong, menyiapkan data awal (Seeding)...";
+                    document.getElementById('db-status').innerText = "Database kosong, menyiapkan data awal...";
                     for (const u of initialUsers) {
                         await setDoc(doc(db, 'users', u.id), u);
-                    }
-                    for (const d of initialDevices) {
-                        await setDoc(doc(db, 'devices', d.id), d);
                     }
                 }
                 
                 const finalUsersSnap = await getDocs(usersCol);
                 cachedUsers = finalUsersSnap.docs.map(d => d.data());
 
-                document.getElementById('db-status').innerText = "Sistem IoT Siap! Silakan Login.";
+                document.getElementById('db-status').innerText = "Sistem IoT Siap!";
                 const btnLogin = document.getElementById('btn-login');
                 btnLogin.disabled = false;
                 btnLogin.classList.replace('bg-slate-600', 'bg-gradient-to-r');
@@ -360,16 +371,44 @@
                 btnLogin.classList.remove('opacity-50', 'cursor-not-allowed');
                 btnLogin.innerText = "Masuk ke Dashboard";
 
+                // Mengecek localStorage jika pengguna sudah login sebelumnya
+                const savedUser = localStorage.getItem('iot_session_user');
+                if (savedUser) {
+                    currentUser = JSON.parse(savedUser);
+                    viewingCustomerId = localStorage.getItem('iot_viewing_customer');
+                    const viewingCustomerName = localStorage.getItem('iot_viewing_name');
+
+                    startRealtimeListeners();
+
+                    // Restore halaman sesuai tipe user
+                    if (currentUser.role === 'admin') {
+                        if (viewingCustomerId) {
+                            // Admin sedang masuk ke dalam dashboard user spesifik sebelum di-refresh
+                            document.getElementById('cust-company-name').innerHTML = `${viewingCustomerName} <span class="ml-2 px-2 py-0.5 rounded bg-purple-600/30 text-purple-400 border border-purple-500/50 text-xs font-bold uppercase">Admin View</span>`;
+                            document.getElementById('btn-back-admin').classList.remove('hidden-screen');
+                            document.getElementById('btn-logout-cust').classList.add('hidden-screen');
+                            switchView('view-customer');
+                        } else {
+                            switchView('view-admin');
+                        }
+                    } else if (currentUser.role === 'customer') {
+                        document.getElementById('btn-back-admin').classList.add('hidden-screen');
+                        document.getElementById('btn-logout-cust').classList.remove('hidden-screen');
+                        document.getElementById('cust-company-name').innerHTML = `${currentUser.name} <span class="text-yellow-400">Dashboard</span>`;
+                        switchView('view-customer');
+                    }
+                }
+
             } catch (error) {
-                console.error("Gagal terhubung ke Firestore:", error);
-                document.getElementById('db-status').innerHTML = "<span class='text-red-500'>Error koneksi ke Firebase. Pastikan aturan (Rules) Firestore Anda mengizinkan read/write (true).</span>";
+                document.getElementById('db-status').innerHTML = "<span class='text-red-500'>Error koneksi ke Firebase. Pastikan rules read/write tersetting true.</span>";
             }
         }
-
         checkAndSeedDatabase();
 
 
-        // 5. Fungsi Navigasi & Auth
+        // -------------------------------------------------------------
+        // LOGIKA LOGIN / LOGOUT
+        // -------------------------------------------------------------
         function switchView(viewId) {
             document.getElementById('view-login').classList.add('hidden-screen');
             document.getElementById('view-admin').classList.add('hidden-screen');
@@ -377,69 +416,25 @@
             document.getElementById(viewId).classList.remove('hidden-screen');
         }
 
-        // FITUR BARU: Logika Form Register
-        window.showRegisterModal = () => {
-            document.getElementById('modal-register').classList.remove('hidden-screen');
-            document.getElementById('reg-name').value = '';
-            document.getElementById('reg-username').value = '';
-            document.getElementById('reg-password').value = '';
-        };
-
-        window.closeRegisterModal = () => {
-            document.getElementById('modal-register').classList.add('hidden-screen');
-        };
-
-        window.handleSelfRegister = async () => {
-            const name = document.getElementById('reg-name').value.trim();
-            const username = document.getElementById('reg-username').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-
-            if(!name || !username || !password) return alert("Semua kolom pendaftaran harus diisi!");
-            
-            // Cek ketersediaan username di database (live cache)
-            if(cachedUsers.find(u => u.username === username)) {
-                return alert("Username tersebut sudah dipakai, silakan pilih yang lain!");
-            }
-
-            const newId = `c_${Date.now()}`; // Generate ID Unik berdasarkan Timestamp
-            const newUserDoc = {
-                id: newId,
-                username: username,
-                password: password,
-                role: 'customer',
-                name: name
-            };
-
-            // Simpan Data User Baru ke Firestore
-            try {
-                await setDoc(doc(db, "users", newId), newUserDoc);
-                alert("Pendaftaran berhasil! Silakan masuk (login) menggunakan akun baru Anda.");
-                closeRegisterModal();
-                
-                // Opsional: Otomatis mengisi form login di depan
-                document.getElementById('login-username').value = username;
-                document.getElementById('login-password').value = password;
-            } catch (error) {
-                alert("Gagal mendaftar. Terjadi kesalahan pada server (Firestore).");
-                console.error(error);
-            }
-        };
-
         window.handleLogin = async () => {
             const userIn = document.getElementById('login-username').value;
             const passIn = document.getElementById('login-password').value;
-
             const user = cachedUsers.find(u => u.username === userIn && u.password === passIn);
             
             if (user) {
                 currentUser = user;
-                viewingCustomerId = null; // Reset view admin
+                viewingCustomerId = null;
+                
+                // Simpan Sesi Login ke Browser
+                localStorage.setItem('iot_session_user', JSON.stringify(user));
+                localStorage.removeItem('iot_viewing_customer');
+                localStorage.removeItem('iot_viewing_name');
+
                 startRealtimeListeners(); 
 
                 if (user.role === 'admin') {
                     switchView('view-admin');
                 } else if (user.role === 'customer') {
-                    // Tampilkan UI khusus Customer asli
                     document.getElementById('btn-back-admin').classList.add('hidden-screen');
                     document.getElementById('btn-logout-cust').classList.remove('hidden-screen');
                     document.getElementById('cust-company-name').innerHTML = `${user.name} <span class="text-yellow-400">Dashboard</span>`;
@@ -455,21 +450,25 @@
             viewingCustomerId = null;
             document.getElementById('login-password').value = '';
             
+            // Hapus Sesi Login dari Browser
+            localStorage.removeItem('iot_session_user');
+            localStorage.removeItem('iot_viewing_customer');
+            localStorage.removeItem('iot_viewing_name');
+            
             if(unsubscribeDevices) unsubscribeDevices();
             if(unsubscribeUsers) unsubscribeUsers();
-            
             switchView('view-login');
         };
 
-        // 6. Realtime Listeners (Firestore Snapshot)
+        // -------------------------------------------------------------
+        // FIREBASE LISTENER REALTIME
+        // -------------------------------------------------------------
         function startRealtimeListeners() {
             unsubscribeDevices = onSnapshot(collection(db, "devices"), (snapshot) => {
                 cachedDevices = snapshot.docs.map(doc => doc.data());
-                
                 if (currentUser) {
                     if (currentUser.role === 'admin') {
                         renderAdminDashboard();
-                        // Jika admin sedang melihat dashboard spesifik customer, update juga layar tersebut
                         if (viewingCustomerId) renderCustomerDashboard();
                     } else if (currentUser.role === 'customer') {
                         renderCustomerDashboard();
@@ -482,7 +481,6 @@
                     cachedUsers = snapshot.docs.map(doc => doc.data());
                     renderAdminDashboard();
                     
-                    // Update daftar akun demo di halaman depan secara real-time
                     const demoList = document.getElementById('demo-accounts-list');
                     if (demoList) {
                         let htmlStr = `<li><b>Admin:</b> admin / 123</li>`;
@@ -496,7 +494,9 @@
         }
 
 
-        // 7. Render UI Admin
+        // -------------------------------------------------------------
+        // ADMIN DASHBOARD & ACTION CUSTOMER
+        // -------------------------------------------------------------
         function renderAdminDashboard() {
             const customers = cachedUsers.filter(u => u.role === 'customer');
             document.getElementById('admin-tot-cust').innerText = customers.length;
@@ -508,10 +508,8 @@
             const tbody = document.getElementById('admin-customer-list');
             tbody.innerHTML = '';
 
-            // Sortir customer dari lama ke baru
             customers.sort((a,b) => a.id.localeCompare(b.id)).forEach(cust => {
                 const acCount = cachedDevices.filter(d => d.ownerId === cust.id).length;
-                
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="py-4 text-slate-300 font-mono text-xs">${cust.id}</td>
@@ -523,115 +521,134 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                             Lihat
                         </button>
-                        <button onclick="adminAddAcToCustomer('${cust.id}')" class="text-xs bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded transition-colors">+ Add AC</button>
+                        <button onclick="showAddAcModal('${cust.id}')" class="text-xs bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded transition-colors flex items-center gap-1">
+                            + Add AC
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // FITUR BARU: Admin Melihat Dashboard Customer
         window.adminViewCustomer = (customerId, customerName) => {
             viewingCustomerId = customerId;
             
-            // Konfigurasi Header untuk mode Admin View
+            // Simpan state admin view ke localStorage untuk direstore jika halaman refresh
+            localStorage.setItem('iot_viewing_customer', customerId);
+            localStorage.setItem('iot_viewing_name', customerName);
+            
             document.getElementById('cust-company-name').innerHTML = `${customerName} <span class="ml-2 px-2 py-0.5 rounded bg-purple-600/30 text-purple-400 border border-purple-500/50 text-xs font-bold uppercase">Admin View</span>`;
             document.getElementById('btn-back-admin').classList.remove('hidden-screen');
             document.getElementById('btn-logout-cust').classList.add('hidden-screen');
             
             switchView('view-customer');
-            renderCustomerDashboard(); // Render dengan data customer tsb
+            renderCustomerDashboard();
         };
 
         window.backToAdmin = () => {
             viewingCustomerId = null;
+            localStorage.removeItem('iot_viewing_customer');
+            localStorage.removeItem('iot_viewing_name');
             switchView('view-admin');
         };
 
-        // FITUR BARU: Tambah Customer Baru (Simpan ke Firebase)
-        window.showAddCustomerModal = () => {
-            document.getElementById('modal-add-customer').classList.remove('hidden-screen');
-            document.getElementById('new-cust-name').value = '';
-            document.getElementById('new-cust-username').value = '';
-        };
+        // Modal Register & Add Customer
+        window.showRegisterModal = () => { document.getElementById('modal-register').classList.remove('hidden-screen'); };
+        window.closeRegisterModal = () => { document.getElementById('modal-register').classList.add('hidden-screen'); };
+        window.showAddCustomerModal = () => { document.getElementById('modal-add-customer').classList.remove('hidden-screen'); };
+        window.closeAddCustomerModal = () => { document.getElementById('modal-add-customer').classList.add('hidden-screen'); };
 
-        window.closeAddCustomerModal = () => {
-            document.getElementById('modal-add-customer').classList.add('hidden-screen');
+        window.handleSelfRegister = async () => {
+            const name = document.getElementById('reg-name').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+
+            if(!name || !username || !password) return alert("Semua kolom pendaftaran harus diisi!");
+            if(cachedUsers.find(u => u.username === username)) return alert("Username tersebut sudah dipakai!");
+
+            const newId = `c_${Date.now()}`; 
+            await setDoc(doc(db, "users", newId), { id: newId, username: username, password: password, role: 'customer', name: name });
+            alert("Pendaftaran berhasil! Silakan masuk menggunakan akun baru Anda.");
+            closeRegisterModal();
+            document.getElementById('login-username').value = username;
+            document.getElementById('login-password').value = password;
         };
 
         window.saveNewCustomer = async () => {
             const name = document.getElementById('new-cust-name').value.trim();
             const username = document.getElementById('new-cust-username').value.trim();
             const password = document.getElementById('new-cust-password').value.trim();
-
             if(!name || !username || !password) return alert("Semua kolom harus diisi!");
-            
-            // Cek ketersediaan username
-            if(cachedUsers.find(u => u.username === username)) return alert("Username sudah dipakai, pilih yang lain!");
+            if(cachedUsers.find(u => u.username === username)) return alert("Username sudah dipakai!");
 
-            const newId = `c_${Date.now()}`; // ID Unik
-            const newUserDoc = {
-                id: newId,
-                username: username,
-                password: password,
-                role: 'customer',
-                name: name
-            };
-
-            // Simpan ke Firestore
-            try {
-                await setDoc(doc(db, "users", newId), newUserDoc);
-                closeAddCustomerModal();
-                // Tidak perlu panggil render manual karena listener "onSnapshot(users)" akan otomatis terpanggil
-            } catch (error) {
-                alert("Gagal menyimpan customer. Cek rules Firebase Anda.");
-            }
+            const newId = `c_${Date.now()}`;
+            await setDoc(doc(db, "users", newId), { id: newId, username: username, password: password, role: 'customer', name: name });
+            closeAddCustomerModal();
         };
 
 
-        window.adminAddAcToCustomer = async (customerId) => {
-            const acTypes = ['Split Inverter', 'Central', 'Cassette', 'Standing Floor', 'Portable'];
-            const randomAc = acTypes[Math.floor(Math.random() * acTypes.length)];
-            const newId = `ac-${Math.floor(Math.random() * 100000)}`;
+        // -------------------------------------------------------------
+        // FITUR TAMBAH AC (MODAL)
+        // -------------------------------------------------------------
+        let targetCustomerIdForAc = null;
 
+        window.showAddAcModal = (customerId) => {
+            targetCustomerIdForAc = customerId;
+            document.getElementById('modal-add-ac').classList.remove('hidden-screen');
+            document.getElementById('new-ac-name').value = '';
+            document.getElementById('new-ac-location').value = '';
+        };
+
+        window.closeAddAcModal = () => {
+            document.getElementById('modal-add-ac').classList.add('hidden-screen');
+        };
+
+        window.saveNewAc = async () => {
+            const acName = document.getElementById('new-ac-name').value.trim();
+            const acLocation = document.getElementById('new-ac-location').value.trim();
+
+            if (!acName || !acLocation) return alert("Tolong isi Nama AC dan Lokasinya!");
+
+            const newId = `ac-${Math.floor(Math.random() * 100000)}`;
             const newAcDoc = {
                 id: newId,
-                ownerId: customerId,
-                name: `AC ${randomAc} (Baru)`,
-                location: `Area Baru`,
+                ownerId: targetCustomerIdForAc,
+                name: acName,
+                location: acLocation,
                 baseData: Math.floor(Math.random() * 50),
                 status: 'online',
                 power: true,
                 temp: 24
             };
 
-            await setDoc(doc(db, "devices", newId), newAcDoc);
+            try {
+                await setDoc(doc(db, "devices", newId), newAcDoc);
+                closeAddAcModal();
+            } catch (error) {
+                alert("Terjadi kesalahan saat menyimpan AC ke server.");
+            }
         };
 
 
-        // 8. Render UI Customer (Bisa dipanggil oleh Customer Asli atau oleh Admin yang sedang memantau)
+        // -------------------------------------------------------------
+        // RENDER CUSTOMER DASHBOARD & CONTROLS
+        // -------------------------------------------------------------
         function renderCustomerDashboard() {
-            // Tentukan ID Customer siapa yang sedang dipantau
             let targetOwnerId = null;
             if (currentUser.role === 'customer') {
                 targetOwnerId = currentUser.id;
             } else if (currentUser.role === 'admin' && viewingCustomerId) {
                 targetOwnerId = viewingCustomerId;
             }
-
             if (!targetOwnerId) return;
 
-            // Filter perangkat dari cache live data
             const myDevices = cachedDevices.filter(d => d.ownerId === targetOwnerId);
-            
             const totalSum = myDevices.reduce((sum, device) => sum + device.baseData, 0);
             const activeACs = myDevices.filter(d => d.power).length;
-            
             const tarifRupiah = 1500; 
-            const totalCost = totalSum * tarifRupiah;
 
             document.getElementById('cust-total-sum').innerText = totalSum.toLocaleString('id-ID');
-            document.getElementById('cust-total-cost').innerText = 'Rp ' + totalCost.toLocaleString('id-ID');
+            document.getElementById('cust-total-cost').innerText = 'Rp ' + (totalSum * tarifRupiah).toLocaleString('id-ID');
             document.getElementById('cust-total-devices').innerText = myDevices.length;
             document.getElementById('cust-active-ac').innerText = activeACs;
 
@@ -639,11 +656,10 @@
             grid.innerHTML = '';
 
             if(myDevices.length === 0) {
-                grid.innerHTML = `<p class="text-slate-500 col-span-full">Belum ada perangkat AC yang didaftarkan ke entitas ini.</p>`;
+                grid.innerHTML = `<p class="text-slate-500 col-span-full bg-slate-800 p-8 rounded-xl text-center border border-slate-700">Belum ada perangkat AC yang didaftarkan ke entitas ini.</p>`;
                 return;
             }
 
-            // Urutkan perangkat berdasarkan ID
             myDevices.sort((a,b) => a.id.localeCompare(b.id)).forEach(device => {
                 const percent = Math.min((device.baseData / 5000) * 100, 100);
                 let barColor = 'from-emerald-400 to-emerald-500';
@@ -700,23 +716,21 @@
         }
 
         window.togglePower = async (deviceId, currentPower) => {
-            await updateDoc(doc(db, "devices", deviceId), {
-                power: !currentPower
-            });
+            await updateDoc(doc(db, "devices", deviceId), { power: !currentPower });
         };
 
         window.changeTemp = async (deviceId, currentTemp, delta, currentPower) => {
             if (!currentPower) return;
             let newTemp = currentTemp + delta;
             if(newTemp >= 16 && newTemp <= 30) {
-                await updateDoc(doc(db, "devices", deviceId), {
-                    temp: newTemp
-                });
+                await updateDoc(doc(db, "devices", deviceId), { temp: newTemp });
             }
         };
 
 
-        // 9. ENGINE SIMULATOR (Update Firebase Otomatis)
+        // -------------------------------------------------------------
+        // ENGINE SIMULATOR (Update Firebase Otomatis)
+        // -------------------------------------------------------------
         document.getElementById('simulation-toggle').addEventListener('change', function(e) {
             isSimulationRunning = e.target.checked;
         });
@@ -732,12 +746,8 @@
                 const newData = device.baseData + Math.round(baseConsumption + tempFactor);
                 
                 try {
-                    await updateDoc(doc(db, "devices", device.id), {
-                        baseData: newData
-                    });
-                } catch(e) {
-                    console.warn("Simulator terhambat: ", e);
-                }
+                    await updateDoc(doc(db, "devices", device.id), { baseData: newData });
+                } catch(e) {}
             }
         }, 5000); 
 
