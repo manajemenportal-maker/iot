@@ -44,6 +44,12 @@
                 <button onclick="handleLogin()" id="btn-login" disabled class="w-full bg-slate-600 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-all mt-4 opacity-50 cursor-not-allowed">
                     Sistem Belum Siap...
                 </button>
+                
+                <!-- Fitur Daftar / Register Baru ditambahkan di sini -->
+                <div class="text-center pt-2 text-sm text-slate-400">
+                    Belum punya akun? 
+                    <button onclick="showRegisterModal()" class="text-cyan-400 hover:text-cyan-300 font-semibold underline transition-colors">Daftar sekarang</button>
+                </div>
             </div>
             
             <div class="mt-6 p-4 bg-slate-900/50 rounded-lg border border-slate-700/50 text-xs text-slate-400">
@@ -247,6 +253,38 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL: REGISTER PENGGUNA BARU (SELF-SERVICE) ==================== -->
+    <div id="modal-register" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 hidden-screen p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 w-full max-w-md relative overflow-hidden">
+            <div class="absolute -left-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
+            
+            <div class="flex justify-between items-center mb-6 relative z-10">
+                <h3 class="text-xl font-bold text-white">Daftar Akun Baru</h3>
+                <button onclick="closeRegisterModal()" class="text-slate-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="space-y-4 relative z-10">
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-1">Nama Perusahaan / Institusi</label>
+                    <input type="text" id="reg-name" placeholder="Misal: PT Teknologi Cerdas" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-1">Username Login</label>
+                    <input type="text" id="reg-username" placeholder="Misal: tekno_cerdas" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-1">Password</label>
+                    <input type="password" id="reg-password" placeholder="Buat password..." class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                </div>
+                <div class="pt-4 flex gap-3">
+                    <button onclick="closeRegisterModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 rounded-lg transition-colors">Batal</button>
+                    <button onclick="handleSelfRegister()" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-colors">Daftar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- ==================== JAVASCRIPT LOGIC (FIREBASE MODULAR) ==================== -->
     <script type="module">
@@ -338,6 +376,54 @@
             document.getElementById('view-customer').classList.add('hidden-screen');
             document.getElementById(viewId).classList.remove('hidden-screen');
         }
+
+        // FITUR BARU: Logika Form Register
+        window.showRegisterModal = () => {
+            document.getElementById('modal-register').classList.remove('hidden-screen');
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-username').value = '';
+            document.getElementById('reg-password').value = '';
+        };
+
+        window.closeRegisterModal = () => {
+            document.getElementById('modal-register').classList.add('hidden-screen');
+        };
+
+        window.handleSelfRegister = async () => {
+            const name = document.getElementById('reg-name').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+
+            if(!name || !username || !password) return alert("Semua kolom pendaftaran harus diisi!");
+            
+            // Cek ketersediaan username di database (live cache)
+            if(cachedUsers.find(u => u.username === username)) {
+                return alert("Username tersebut sudah dipakai, silakan pilih yang lain!");
+            }
+
+            const newId = `c_${Date.now()}`; // Generate ID Unik berdasarkan Timestamp
+            const newUserDoc = {
+                id: newId,
+                username: username,
+                password: password,
+                role: 'customer',
+                name: name
+            };
+
+            // Simpan Data User Baru ke Firestore
+            try {
+                await setDoc(doc(db, "users", newId), newUserDoc);
+                alert("Pendaftaran berhasil! Silakan masuk (login) menggunakan akun baru Anda.");
+                closeRegisterModal();
+                
+                // Opsional: Otomatis mengisi form login di depan
+                document.getElementById('login-username').value = username;
+                document.getElementById('login-password').value = password;
+            } catch (error) {
+                alert("Gagal mendaftar. Terjadi kesalahan pada server (Firestore).");
+                console.error(error);
+            }
+        };
 
         window.handleLogin = async () => {
             const userIn = document.getElementById('login-username').value;
