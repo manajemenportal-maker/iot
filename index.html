@@ -29,7 +29,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 </div>
                 <h1 class="text-2xl font-bold text-white">IoT Cloud Manager</h1>
-                <p class="text-sm text-slate-400 mt-1">Silakan login untuk mengakses sistem</p>
+                <p class="text-sm text-cyan-400 mt-1 font-mono" id="db-status">Menghubungkan ke Firebase...</p>
             </div>
 
             <div class="space-y-4 relative z-10">
@@ -41,17 +41,17 @@
                     <label class="block text-sm font-medium text-slate-400 mb-1">Password</label>
                     <input type="password" id="login-password" value="123" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
                 </div>
-                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-all mt-4">
-                    Masuk ke Dashboard
+                <button onclick="handleLogin()" id="btn-login" disabled class="w-full bg-slate-600 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-all mt-4 opacity-50 cursor-not-allowed">
+                    Sistem Belum Siap...
                 </button>
             </div>
             
             <div class="mt-6 p-4 bg-slate-900/50 rounded-lg border border-slate-700/50 text-xs text-slate-400">
-                <p class="font-bold text-slate-300 mb-1">Akun Demo:</p>
+                <p class="font-bold text-slate-300 mb-1">Akun Demo (Diambil dari Firestore):</p>
                 <ul class="list-disc pl-4 space-y-1">
-                    <li><b>Admin:</b> admin / 123 <span class="text-slate-500">(Akses Kelola Semua Customer)</span></li>
-                    <li><b>Customer 1:</b> ptangkasa / 123 <span class="text-slate-500">(Hanya lihat AC PT Angkasa)</span></li>
-                    <li><b>Customer 2:</b> hotelmaju / 123 <span class="text-slate-500">(Hanya lihat AC Hotel Maju)</span></li>
+                    <li><b>Admin:</b> admin / 123</li>
+                    <li><b>Customer 1:</b> ptangkasa / 123</li>
+                    <li><b>Customer 2:</b> hotelmaju / 123</li>
                 </ul>
             </div>
         </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center gap-4">
                     <div class="p-4 bg-emerald-500/20 text-emerald-400 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
-                    <div><p class="text-sm text-slate-400">Sistem Engine</p><h3 class="text-xl font-bold text-emerald-400">Running Normal</h3></div>
+                    <div><p class="text-sm text-slate-400">Sistem Engine</p><h3 class="text-xl font-bold text-emerald-400">Firestore Syncing...</h3></div>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
             <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
                 <div class="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
                     <h2 class="text-lg font-bold text-white">Daftar Customer & Manajemen AC</h2>
-                    <button onclick="alert('Fitur tambah customer baru di-mockup')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <button onclick="alert('Fitur tambah customer ini dapat dihubungkan ke form registrasi Firebase.')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                         + Tambah Customer
                     </button>
                 </div>
@@ -131,7 +131,7 @@
             <div class="flex items-center gap-4 text-sm">
                 <div class="flex items-center gap-2 hidden md:flex">
                     <span class="w-3 h-3 bg-emerald-500 rounded-full glow-pulse"></span>
-                    <span class="text-slate-300">Sistem Aktif</span>
+                    <span class="text-slate-300">Live dari Firestore</span>
                 </div>
                 <button onclick="handleLogout()" class="bg-red-500/20 text-red-400 hover:bg-red-500/30 px-4 py-1.5 rounded-lg font-medium transition-colors border border-red-500/30">Logout</button>
             </div>
@@ -174,12 +174,13 @@
                     </div>
                     <div class="mt-4 pt-4 border-t border-slate-700">
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-slate-400">Live Simulator</span>
+                            <span class="text-sm text-slate-400">Database Auto-Sync Engine</span>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" id="simulation-toggle" class="sr-only peer" checked>
                                 <div class="w-11 h-6 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
                             </label>
                         </div>
+                        <p class="text-[10px] text-slate-500 mt-2">Update meteran (kWh) langsung disimpan ke Firebase setiap 5 detik.</p>
                     </div>
                 </div>
             </section>
@@ -199,34 +200,93 @@
         </main>
     </div>
 
-    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
-    <script>
-        // --- 1. SIMULASI DATABASE ---
-        const db = {
-            users: [
-                { id: 'u_admin', username: 'admin', password: '123', role: 'admin', name: 'Super Administrator' },
-                { id: 'c_001', username: 'ptangkasa', password: '123', role: 'customer', name: 'PT. Angkasa Raya' },
-                { id: 'c_002', username: 'hotelmaju', password: '123', role: 'customer', name: 'Hotel Maju Sejahtera' }
-            ],
-            // Data AC diikat ke customer dengan property ownerId
-            devices: [
-                { id: 'ac-101', ownerId: 'c_001', name: 'AC Ruang Meeting', location: 'Lantai 1', baseData: 1450, status: 'online', power: true, temp: 22 },
-                { id: 'ac-102', ownerId: 'c_001', name: 'AC Server Room', location: 'Lantai 2', baseData: 4200, status: 'online', power: true, temp: 18 },
-                { id: 'ac-103', ownerId: 'c_001', name: 'AC Lobby', location: 'Ground', baseData: 800, status: 'online', power: false, temp: 24 },
-                
-                { id: 'ac-201', ownerId: 'c_002', name: 'AC Kamar 101', location: 'Lantai 1', baseData: 120, status: 'online', power: true, temp: 25 },
-                { id: 'ac-202', ownerId: 'c_002', name: 'AC Kamar 102', location: 'Lantai 1', baseData: 150, status: 'online', power: true, temp: 23 },
-                { id: 'ac-203', ownerId: 'c_002', name: 'AC Restoran', location: 'Ground', baseData: 950, status: 'online', power: true, temp: 21 },
-                { id: 'ac-204', ownerId: 'c_002', name: 'AC Dapur', location: 'Ground', baseData: 1100, status: 'online', power: false, temp: 20 },
-                { id: 'ac-205', ownerId: 'c_002', name: 'AC Aula', location: 'Lantai 2', baseData: 2300, status: 'online', power: true, temp: 16 }
-            ]
+    <!-- ==================== JAVASCRIPT LOGIC (FIREBASE MODULAR) ==================== -->
+    <script type="module">
+        // 1. Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+        import { getFirestore, collection, getDocs, onSnapshot, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // 2. Konfigurasi Firebase Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyBY0d7PEX_YwUbZZc_2D9F3I1pZ_fQj40M",
+            authDomain: "iot-xtron.firebaseapp.com",
+            projectId: "iot-xtron",
+            storageBucket: "iot-xtron.firebasestorage.app",
+            messagingSenderId: "651113774703",
+            appId: "1:651113774703:web:87254d673d28b7f3b2d79a",
+            measurementId: "G-GKS00T53K5"
         };
 
-        // State Global
+        // 3. Inisialisasi Aplikasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // State Global Aplikasi
         let currentUser = null;
         let isSimulationRunning = true;
+        let cachedUsers = [];
+        let cachedDevices = [];
+        let unsubscribeDevices = null;
+        let unsubscribeUsers = null;
 
-        // --- 2. AUTHENTICATION LOGIC ---
+        // Data awal untuk seeding database jika masih kosong
+        const initialUsers = [
+            { id: 'u_admin', username: 'admin', password: '123', role: 'admin', name: 'Super Administrator' },
+            { id: 'c_001', username: 'ptangkasa', password: '123', role: 'customer', name: 'PT. Angkasa Raya' },
+            { id: 'c_002', username: 'hotelmaju', password: '123', role: 'customer', name: 'Hotel Maju Sejahtera' }
+        ];
+        const initialDevices = [
+            { id: 'ac-101', ownerId: 'c_001', name: 'AC Ruang Meeting', location: 'Lantai 1', baseData: 1450, status: 'online', power: true, temp: 22 },
+            { id: 'ac-102', ownerId: 'c_001', name: 'AC Server Room', location: 'Lantai 2', baseData: 4200, status: 'online', power: true, temp: 18 },
+            { id: 'ac-103', ownerId: 'c_001', name: 'AC Lobby', location: 'Ground', baseData: 800, status: 'online', power: false, temp: 24 },
+            { id: 'ac-201', ownerId: 'c_002', name: 'AC Kamar 101', location: 'Lantai 1', baseData: 120, status: 'online', power: true, temp: 25 },
+            { id: 'ac-202', ownerId: 'c_002', name: 'AC Kamar 102', location: 'Lantai 1', baseData: 150, status: 'online', power: true, temp: 23 },
+            { id: 'ac-203', ownerId: 'c_002', name: 'AC Restoran', location: 'Ground', baseData: 950, status: 'online', power: true, temp: 21 }
+        ];
+
+        // 4. Inisialisasi Database Pertama Kali
+        async function checkAndSeedDatabase() {
+            try {
+                const usersCol = collection(db, 'users');
+                const usersSnapshot = await getDocs(usersCol);
+                
+                // Jika database kosong, masukkan data awal
+                if (usersSnapshot.empty) {
+                    document.getElementById('db-status').innerText = "Database kosong, menyiapkan data awal (Seeding)...";
+                    for (const u of initialUsers) {
+                        await setDoc(doc(db, 'users', u.id), u);
+                    }
+                    for (const d of initialDevices) {
+                        await setDoc(doc(db, 'devices', d.id), d);
+                    }
+                }
+                
+                // Fetch data caching awal
+                const finalUsersSnap = await getDocs(usersCol);
+                cachedUsers = finalUsersSnap.docs.map(d => d.data());
+
+                // Enable Login Button
+                document.getElementById('db-status').innerText = "Sistem IoT Siap! Silakan Login.";
+                const btnLogin = document.getElementById('btn-login');
+                btnLogin.disabled = false;
+                btnLogin.classList.replace('bg-slate-600', 'bg-gradient-to-r');
+                btnLogin.classList.add('from-cyan-500', 'to-blue-600', 'hover:from-cyan-400', 'hover:to-blue-500');
+                btnLogin.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnLogin.innerText = "Masuk ke Dashboard";
+
+            } catch (error) {
+                console.error("Gagal terhubung ke Firestore:", error);
+                document.getElementById('db-status').innerHTML = "<span class='text-red-500'>Error koneksi ke Firebase. Pastikan aturan (Rules) Firestore Anda mengizinkan read/write (true).</span>";
+            }
+        }
+
+        // Panggil saat halaman dimuat
+        checkAndSeedDatabase();
+
+
+        // 5. Fungsi Navigasi & Auth
         function switchView(viewId) {
             document.getElementById('view-login').classList.add('hidden-screen');
             document.getElementById('view-admin').classList.add('hidden-screen');
@@ -234,46 +294,72 @@
             document.getElementById(viewId).classList.remove('hidden-screen');
         }
 
-        function handleLogin() {
+        // Ekspos fungsi ke Window agar tombol HTML (onclick) bisa mengenalinya dari dalam modul ES6
+        window.handleLogin = async () => {
             const userIn = document.getElementById('login-username').value;
             const passIn = document.getElementById('login-password').value;
 
-            const user = db.users.find(u => u.username === userIn && u.password === passIn);
+            // Karena data users jarang berubah, kita baca dari cache yang diambil saat load
+            const user = cachedUsers.find(u => u.username === userIn && u.password === passIn);
             
             if (user) {
                 currentUser = user;
+                startRealtimeListeners(); // Mulai menarik data live dari Firestore
+
                 if (user.role === 'admin') {
                     switchView('view-admin');
-                    renderAdminDashboard();
                 } else if (user.role === 'customer') {
                     switchView('view-customer');
                     document.getElementById('cust-company-name').innerHTML = `${user.name} <span class="text-yellow-400">Dashboard</span>`;
-                    renderCustomerDashboard();
                 }
             } else {
                 alert("Username atau Password salah!");
             }
-        }
+        };
 
-        function handleLogout() {
+        window.handleLogout = () => {
             currentUser = null;
             document.getElementById('login-password').value = '';
+            
+            // Hentikan Realtime Sync untuk hemat kuota Firebase
+            if(unsubscribeDevices) unsubscribeDevices();
+            if(unsubscribeUsers) unsubscribeUsers();
+            
             switchView('view-login');
+        };
+
+        // 6. Realtime Listeners (Firestore Snapshot)
+        function startRealtimeListeners() {
+            // Dengarkan perubahan pada koleksi "devices" secara real-time
+            unsubscribeDevices = onSnapshot(collection(db, "devices"), (snapshot) => {
+                cachedDevices = snapshot.docs.map(doc => doc.data());
+                
+                // Segarkan UI yang sedang aktif
+                if(currentUser && currentUser.role === 'admin') renderAdminDashboard();
+                if(currentUser && currentUser.role === 'customer') renderCustomerDashboard();
+            });
+
+            if(currentUser.role === 'admin') {
+                // Admin butuh update jumlah user juga
+                unsubscribeUsers = onSnapshot(collection(db, "users"), (snapshot) => {
+                    cachedUsers = snapshot.docs.map(doc => doc.data());
+                    renderAdminDashboard();
+                });
+            }
         }
 
-        // --- 3. ADMIN DASHBOARD LOGIC ---
-        function renderAdminDashboard() {
-            // Stats
-            const customers = db.users.filter(u => u.role === 'customer');
-            document.getElementById('admin-tot-cust').innerText = customers.length;
-            document.getElementById('admin-tot-ac').innerText = db.devices.length;
 
-            // Render Table
+        // 7. Render UI Admin
+        function renderAdminDashboard() {
+            const customers = cachedUsers.filter(u => u.role === 'customer');
+            document.getElementById('admin-tot-cust').innerText = customers.length;
+            document.getElementById('admin-tot-ac').innerText = cachedDevices.length;
+
             const tbody = document.getElementById('admin-customer-list');
             tbody.innerHTML = '';
 
             customers.forEach(cust => {
-                const acCount = db.devices.filter(d => d.ownerId === cust.id).length;
+                const acCount = cachedDevices.filter(d => d.ownerId === cust.id).length;
                 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -289,12 +375,13 @@
             });
         }
 
-        function adminAddAcToCustomer(customerId) {
+        // Fitur Tulis ke Firestore: Admin Tambah AC (Create Document)
+        window.adminAddAcToCustomer = async (customerId) => {
             const acTypes = ['Split Inverter', 'Central', 'Cassette', 'Standing Floor'];
             const randomAc = acTypes[Math.floor(Math.random() * acTypes.length)];
-            const newId = `ac-${Math.floor(Math.random() * 10000)}`;
+            const newId = `ac-${Math.floor(Math.random() * 100000)}`;
 
-            db.devices.push({
+            const newAcDoc = {
                 id: newId,
                 ownerId: customerId,
                 name: `AC ${randomAc} (Baru)`,
@@ -303,29 +390,28 @@
                 status: 'online',
                 power: true,
                 temp: 24
-            });
+            };
 
-            // Re-render UI
-            renderAdminDashboard();
-        }
+            // Simpan langsung ke database cloud
+            await setDoc(doc(db, "devices", newId), newAcDoc);
+            // Tidak perlu render ulang manual, karena onSnapshot() akan otomatis terpicu!
+        };
 
-        // --- 4. CUSTOMER DASHBOARD LOGIC ---
+
+        // 8. Render UI Customer
         function renderCustomerDashboard() {
             if(!currentUser || currentUser.role !== 'customer') return;
 
-            // Filter perangkat hanya milik user yang sedang login
-            const myDevices = db.devices.filter(d => d.ownerId === currentUser.id);
+            // Filter perangkat hanya milik user yang sedang login dari cache live data
+            const myDevices = cachedDevices.filter(d => d.ownerId === currentUser.id);
             
-            // Kalkulasi Total
             const totalSum = myDevices.reduce((sum, device) => sum + device.baseData, 0);
             const activeACs = myDevices.filter(d => d.power).length;
 
-            // Update Panel Utama
             document.getElementById('cust-total-sum').innerText = totalSum.toLocaleString('id-ID');
             document.getElementById('cust-total-devices').innerText = myDevices.length;
             document.getElementById('cust-active-ac').innerText = activeACs;
 
-            // Render Kartu Perangkat IoT
             const grid = document.getElementById('cust-devices-grid');
             grid.innerHTML = '';
 
@@ -334,7 +420,8 @@
                 return;
             }
 
-            myDevices.forEach(device => {
+            // Urutkan perangkat berdasarkan ID agar posisi tidak lompat-lompat saat live update
+            myDevices.sort((a,b) => a.id.localeCompare(b.id)).forEach(device => {
                 const percent = Math.min((device.baseData / 5000) * 100, 100);
                 let barColor = 'from-emerald-400 to-emerald-500';
                 if(device.baseData > 2000) barColor = 'from-yellow-400 to-orange-500';
@@ -369,16 +456,16 @@
                     </div>
 
                     <div class="pt-4 border-t border-slate-700 flex justify-between items-center">
-                        <button onclick="togglePower('${device.id}')" class="p-2 rounded-full ${device.power ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'} transition-colors" title="Power On/Off">
+                        <button onclick="togglePower('${device.id}', ${device.power})" class="p-2 rounded-full ${device.power ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'} transition-colors" title="Power On/Off">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
                         </button>
                         
                         <div class="flex items-center gap-3 bg-slate-900 rounded-lg p-1 border border-slate-700">
-                            <button onclick="changeTemp('${device.id}', -1)" class="w-8 h-8 flex items-center justify-center rounded-md transition-colors ${device.power ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-slate-700 cursor-not-allowed'}" ${!device.power ? 'disabled' : ''}>
+                            <button onclick="changeTemp('${device.id}', ${device.temp}, -1, ${device.power})" class="w-8 h-8 flex items-center justify-center rounded-md transition-colors ${device.power ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-slate-700 cursor-not-allowed'}" ${!device.power ? 'disabled' : ''}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             </button>
                             <span class="text-lg font-bold font-mono ${device.power ? 'text-cyan-400' : 'text-slate-600'} w-8 text-center">${device.temp}°</span>
-                            <button onclick="changeTemp('${device.id}', 1)" class="w-8 h-8 flex items-center justify-center rounded-md transition-colors ${device.power ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-slate-700 cursor-not-allowed'}" ${!device.power ? 'disabled' : ''}>
+                            <button onclick="changeTemp('${device.id}', ${device.temp}, 1, ${device.power})" class="w-8 h-8 flex items-center justify-center rounded-md transition-colors ${device.power ? 'text-slate-400 hover:text-white hover:bg-slate-700' : 'text-slate-700 cursor-not-allowed'}" ${!device.power ? 'disabled' : ''}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             </button>
                         </div>
@@ -388,51 +475,54 @@
             });
         }
 
-        // Action AC dari Customer
-        function togglePower(deviceId) {
-            const deviceIndex = db.devices.findIndex(d => d.id === deviceId);
-            if (deviceIndex !== -1) {
-                db.devices[deviceIndex].power = !db.devices[deviceIndex].power;
-                renderCustomerDashboard();
-            }
-        }
-
-        function changeTemp(deviceId, delta) {
-            const deviceIndex = db.devices.findIndex(d => d.id === deviceId);
-            if (deviceIndex !== -1 && db.devices[deviceIndex].power) {
-                let newTemp = db.devices[deviceIndex].temp + delta;
-                if(newTemp >= 16 && newTemp <= 30) {
-                    db.devices[deviceIndex].temp = newTemp;
-                    renderCustomerDashboard();
-                }
-            }
-        }
-
-        // --- 5. BACKGROUND ENGINE (Simulator) ---
-        // Simulator berjalan global mengubah state database
-        setInterval(() => {
-            if(!isSimulationRunning) return;
-
-            db.devices = db.devices.map(device => {
-                if(device.status === 'online' && device.power) {
-                    const baseConsumption = Math.floor(Math.random() * 3) + 1; 
-                    const tempFactor = (30 - device.temp) * 0.2; 
-                    const newData = device.baseData + Math.round(baseConsumption + tempFactor);
-                    return { ...device, baseData: newData };
-                }
-                return device;
+        // Fitur Update ke Firestore: Action AC dari Customer
+        window.togglePower = async (deviceId, currentPower) => {
+            // Update dokumen langsung di database cloud
+            await updateDoc(doc(db, "devices", deviceId), {
+                power: !currentPower
             });
-            
-            // Hanya update layar yang sedang terbuka agar performa tidak berat
-            if(currentUser) {
-                if(currentUser.role === 'customer') renderCustomerDashboard();
-            }
-        }, 3000);
+        };
 
-        // Toggle Simulasi dari UI
+        window.changeTemp = async (deviceId, currentTemp, delta, currentPower) => {
+            if (!currentPower) return;
+            let newTemp = currentTemp + delta;
+            if(newTemp >= 16 && newTemp <= 30) {
+                // Update ke database cloud
+                await updateDoc(doc(db, "devices", deviceId), {
+                    temp: newTemp
+                });
+            }
+        };
+
+
+        // 9. ENGINE SIMULATOR (Update Firebase Otomatis)
         document.getElementById('simulation-toggle').addEventListener('change', function(e) {
             isSimulationRunning = e.target.checked;
         });
+
+        // Simulator ini sekarang menulis data (write) ke Firestore
+        setInterval(async () => {
+            if(!isSimulationRunning || !currentUser) return;
+            
+            // Untuk menghemat kuota Write di Firebase, simulator diperlambat (setiap 5 detik)
+            // Dan hanya meng-update perangkat yang keadaannya 'power: true'
+            const activeDevices = cachedDevices.filter(d => d.status === 'online' && d.power);
+            
+            for (let device of activeDevices) {
+                const baseConsumption = Math.floor(Math.random() * 3) + 1; 
+                const tempFactor = (30 - device.temp) * 0.2; 
+                const newData = device.baseData + Math.round(baseConsumption + tempFactor);
+                
+                // Tembakkan pembaruan ke Firestore diam-diam di background
+                try {
+                    await updateDoc(doc(db, "devices", device.id), {
+                        baseData: newData
+                    });
+                } catch(e) {
+                    console.warn("Simulator terhambat: ", e);
+                }
+            }
+        }, 5000); 
 
     </script>
 </body>
