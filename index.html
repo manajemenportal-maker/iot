@@ -299,6 +299,10 @@
                     <label class="block text-sm font-medium text-slate-400 mb-1">Lokasi Pemasangan</label>
                     <input type="text" id="new-ac-location" placeholder="Misal: Ruang Meeting / Lantai 1" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-1">Alamat IoT / Device ID (MAC/IP)</label>
+                    <input type="text" id="new-ac-address" placeholder="Misal: ESP32-A1B2C3 atau 192.168.1.10" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                </div>
                 <div class="pt-4 flex gap-3">
                     <button onclick="closeAddAcModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 rounded-lg transition-colors">Batal</button>
                     <button onclick="saveNewAc()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2.5 rounded-lg shadow-lg transition-colors">Simpan Data IoT</button>
@@ -597,6 +601,7 @@
             document.getElementById('modal-add-ac').classList.remove('hidden-screen');
             document.getElementById('new-ac-name').value = '';
             document.getElementById('new-ac-location').value = '';
+            document.getElementById('new-ac-address').value = '';
         };
 
         window.closeAddAcModal = () => {
@@ -606,12 +611,16 @@
         window.saveNewAc = async () => {
             const acName = document.getElementById('new-ac-name').value.trim();
             const acLocation = document.getElementById('new-ac-location').value.trim();
+            const acAddress = document.getElementById('new-ac-address').value.trim();
 
-            if (!acName || !acLocation) return alert("Tolong isi Nama AC dan Lokasinya!");
+            if (!acName || !acLocation || !acAddress) return alert("Tolong isi Nama AC, Lokasi, dan Alamat IoT!");
 
-            const newId = `ac-${Math.floor(Math.random() * 100000)}`;
+            // Gunakan Alamat IoT sebagai ID Dokumen Firebase (memudahkan ESP32 menghubungkan datanya sendiri)
+            const newId = acAddress.replace(/\s+/g, '-').toUpperCase();
+            
             const newAcDoc = {
                 id: newId,
+                iotAddress: acAddress,
                 ownerId: targetCustomerIdForAc,
                 name: acName,
                 location: acLocation,
@@ -675,7 +684,7 @@
                                 <span class="w-2.5 h-2.5 rounded-full ${device.status === 'online' ? 'bg-emerald-500' : 'bg-red-500'} shadow-[0_0_5px_rgba(16,185,129,0.5)]"></span>
                                 <h4 class="font-semibold text-slate-200 truncate pr-2">${device.name}</h4>
                             </div>
-                            <p class="text-xs text-slate-400 font-mono">${device.id} • ${device.location}</p>
+                            <p class="text-xs text-slate-400 font-mono">ID: ${device.iotAddress || device.id} • ${device.location}</p>
                         </div>
                     </div>
                     
